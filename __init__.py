@@ -106,16 +106,10 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions (à 
 def est_authentifie():
     return session.get('authentifie')
 
-
-
-
-
-
-
 # Route pour afficher le formulaire de contact
-#@app.route('/contact')
-#def contact_form():
- #   return render_template('contact.html')
+@app.route('/contact')
+def contact_form():
+    return render_template('contact.html')
 
 if(__name__ == "__main__"):
     app.run()
