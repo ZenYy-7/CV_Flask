@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request, redirect, url_for
 import json
 import sqlite3
 
@@ -19,37 +19,27 @@ def resume_2():
 @app.route('/resume_template')
 def resume_template():
     return render_template("resume_template.html")
+# Route pour afficher le formulaire de contact
 @app.route('/contact')
-def contact():
+def contact_form():
     return render_template('contact.html')
 
-@app.route('/submit_message', methods=['POST'])
-def submit_message():
-    name = request.form['name']
-    email = request.form['email']
-    message = request.form['message']
-    
-    # Connexion à la base de données SQLite
-    conn = sqlite3.connect('messages.db')
+# Route pour gérer la soumission du formulaire de contact
+@app.route('/submit_contact_form', methods=['POST'])
+def submit_contact_form():
+    # Récupérer les données du formulaire soumis
+    name = request.form.get('name')
+    email = request.form.get('email')
+    message = request.form.get('message')
+
+    # Insérer les données dans la base de données SQLite
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
-    
-    # Insertion du message dans la base de données
     cursor.execute("INSERT INTO messages (name, email, message) VALUES (?, ?, ?)", (name, email, message))
     conn.commit()
     conn.close()
-    
-    return 'Message envoyé avec succès!'
-# Création d'une nouvelle route pour la lecture de la BDD
-@app.route('/lecture/')
-def ReadBDD():
-    conn = get_db_connection()
-    posts = conn.execute('SELECT * FROM livres').fetchall()
-    conn.close()
 
-    # Convertit la liste de livre en un format JSON
-    json_posts = [{'id': post['id'], 'title': post['title'], 'content': post['auteur']} for post in posts]
-
-    # Renvoie la réponse JSON
-    return jsonify(posts=json_posts)
+    # Rediriger ou afficher un message de confirmation
+    return "Votre demande de contact a bien été envoyée."
 if(__name__ == "__main__"):
     app.run()
