@@ -106,6 +106,22 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions (à 
 def est_authentifie():
     return session.get('authentifie')
 
+@app.route('/post/<int:post_id>')
+def get_post(post_id):
+    conn = get_db_connection()
+    post = conn.execute('SELECT * FROM livres WHERE id = ?', (post_id,)).fetchone()
+    conn.close()
+
+    # Si la publication avec l'ID spécifié n'est pas trouvée, renvoie une réponse 404 Not Found
+    if post is None:
+        return jsonify(error='Post not found'), 404
+
+    # Convertit la publication en un format JSON
+    json_post = {'id': post['id'], 'title': post['title'], 'auteur': post['auteur']}
+    
+    # Renvoie la réponse JSON
+    return jsonify(post=json_post)
+
 # Route pour afficher le formulaire de contact
 @app.route('/contact')
 def contact_form():
