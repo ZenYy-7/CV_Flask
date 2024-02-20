@@ -18,5 +18,22 @@ def resume_2():
 def resume_template():
     return render_template("resume_template.html")
 
+@app.route('/submit_message', methods=['POST'])
+def submit_message():
+    name = request.form['name']
+    email = request.form['email']
+    message = request.form['message']
+    
+    # Connexion à la base de données SQLite
+    conn = sqlite3.connect('messages.db')
+    cursor = conn.cursor()
+    
+    # Insertion du message dans la base de données
+    cursor.execute("INSERT INTO messages (name, email, message) VALUES (?, ?, ?)", (name, email, message))
+    conn.commit()
+    conn.close()
+    
+    return 'Message envoyé avec succès!'
+
 if(__name__ == "__main__"):
     app.run()
