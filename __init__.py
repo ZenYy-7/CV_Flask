@@ -1,5 +1,7 @@
-from flask import Flask, render_template, jsonify, request, redirect, url_for
-import json
+from flask import Flask, render_template_string, render_template, jsonify
+from flask import Flask, render_template, request, redirect
+from flask import json
+from urllib.request import urlopen
 import sqlite3
 
 app = Flask(__name__) #creating flask app name
@@ -19,6 +21,17 @@ def resume_2():
 @app.route('/resume_template')
 def resume_template():
     return render_template("resume_template.html")
+# Création d'une nouvelle route pour la lecture de la BDD
+@app.route("/consultation/")
+def ReadBDD():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients;')
+    data = cursor.fetchall()
+    conn.close()
+    
+    # Rendre le template HTML et transmettre les données
+    return render_template('read_data.html', data=data)
 # Route pour afficher le formulaire de contact
 @app.route('/contact')
 def contact_form():
