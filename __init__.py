@@ -19,6 +19,9 @@ def resume_2():
 @app.route('/resume_template')
 def resume_template():
     return render_template("resume_template.html")
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
 
 @app.route('/submit_message', methods=['POST'])
 def submit_message():
