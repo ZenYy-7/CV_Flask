@@ -22,7 +22,7 @@ def messages():
             # Insérer les données dans la base de données
             with sqlite3.connect('/home/groshenythibaut/database.db') as conn:
                 cursor = conn.cursor()
-                cursor.execute('INSERT INTO messages (email, message) VALUES (?, ?)', (email, message))
+                cursor.execute('INSERT INTO clients (email, message) VALUES (?, ?)', (email, message))
                 conn.commit()
 
             # Rediriger vers la page de consultation des messages après l'ajout
