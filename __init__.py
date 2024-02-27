@@ -20,7 +20,7 @@ def messages():
             message = request.form['message']
 
             # Insérer les données dans la base de données
-            with sqlite3.connect('database.db') as conn:
+            with sqlite3.connect('/home/groshenythibaut/database.db') as conn:
                 cursor = conn.cursor()
                 cursor.execute('INSERT INTO messages (email, message) VALUES (?, ?)', (email, message))
                 conn.commit()
