@@ -35,17 +35,7 @@ def messages():
         print("Une erreur s'est produite : ", str(e))
         print(traceback.format_exc())
         return str(e), 500
-@app.route('/resume_1')
-def resume_1():
-    return render_template("resume_1.html")
 
-@app.route('/resume_2')
-def resume_2():
-    return render_template("resume_2.html")
-
-@app.route('/resume_template')
-def resume_template():
-    return render_template("resume_template.html")
 # Création d'une nouvelle route pour la lecture de la BDD
 @app.route("/consultation/")
 def ReadBDD():
@@ -57,9 +47,6 @@ def ReadBDD():
     
     # Rendre le template HTML et transmettre les données
     return render_template('read_data.html', data=data) 
-
-
-
 
 @app.route('/fiche_client/<int:post_id>')
 def Readfiche(post_id):
@@ -108,12 +95,11 @@ def ajouter_client():
         nom = request.form['nom']
         prenom = request.form['prenom']
         adresse = request.form['adresse']
-
-        # Insérer les données dans la base de données (ici, je suppose que tu as une table 'clients')
+        
         conn = sqlite3.connect('/home/groshenythibaut/database.db')
         cursor = conn.cursor()
         if conn is not None:
-            cursor.execute('INSERT INTO clients (nom, prenom, adresse) VALUES (?, ?, ?)', (nom, prenom, adresse))
+            cursor.execute('INSERT INTO clients (email, message) VALUES (?, ?)', (email, message))
             conn.commit()
             conn.close()
         else:
@@ -146,11 +132,6 @@ def get_post(post_id):
     
     # Renvoie la réponse JSON
     return jsonify(post=json_post)
-
-# Route pour afficher le formulaire de contact
-@app.route('/contact')
-def contact_form():
-    return render_template('contact.html')
 
 if(__name__ == "__main__"):
     app.run()
